@@ -1,9 +1,11 @@
 # -*- encoding: utf-8 -*-
 # Author: Epix
 import scrapy
-from .. import accounts
+from Ocular import accounts
 from scrapy.http.request.form import FormRequest
-
+from Ocular.items import OcularItem
+from scrapy.utils.response import get_base_url
+from urlparse import urljoin
 
 class pixiv(scrapy.Spider):
     name = 'pixiv'
@@ -21,4 +23,9 @@ class pixiv(scrapy.Spider):
             yield self.make_requests_from_url(url)
 
     def parse(self, response):
-        print(response.css('title'))
+        for post in response.css("._image-items>.image-item"):
+            print("testtest")
+            item = OcularItem()
+            item['url'] = urljoin(get_base_url(response),post.xpath(".//a/@href")[0].extract())
+            print(item['url'])
+            yield item

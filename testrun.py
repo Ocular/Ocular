@@ -6,7 +6,7 @@ from scrapy import log, signals
 from Ocular.spiders.pixiv import pixiv
 from scrapy.utils.project import get_project_settings
 
-spider = pixiv()
+spider = pixiv([154294, 296720])
 settings = get_project_settings()
 crawler = Crawler(settings)
 crawler.configure()

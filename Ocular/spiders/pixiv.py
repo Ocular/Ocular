@@ -3,14 +3,20 @@
 import scrapy
 from Ocular import accounts
 from scrapy.http.request.form import FormRequest
+from scrapy.contrib.spiders.crawl import CrawlSpider
 from Ocular.items import OcularItem
 from scrapy.utils.response import get_base_url
 from urlparse import urljoin
 
-class pixiv(scrapy.Spider):
+
+class pixiv(CrawlSpider):
     name = 'pixiv'
-    start_urls = ['http://www.pixiv.net/member_illust.php?id=154294']
+    # start_urls = ['http://www.pixiv.net/member_illust.php?id=154294']
     # headers={'Content-Type':'application/x-www-form-url'}
+
+    def __init__(self, ids):
+        self.start_urls = ['http://www.pixiv.net/member_illust.php?id=%s' % id for id in ids]
+        print(self.start_urls)
 
     def start_requests(self):
         return [FormRequest('https://www.secure.pixiv.net/login.php',
@@ -21,11 +27,3 @@ class pixiv(scrapy.Spider):
     def after_login(self, response):
         for url in self.start_urls:
             yield self.make_requests_from_url(url)
-
-    def parse(self, response):
-        for post in response.css("._image-items>.image-item"):
-            print("testtest")
-            item = OcularItem()
-            item['url'] = urljoin(get_base_url(response),post.xpath(".//a/@href")[0].extract())
-            print(item['url'])
-            yield item

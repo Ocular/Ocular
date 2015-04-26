@@ -18,5 +18,6 @@ class OcularItem(scrapy.Item):
     time = scrapy.Field()
     version = scrapy.Field()
     author = scrapy.Field()
+    image=scrapy.Field()
     tag = scrapy.Field()
     extra = scrapy.Field()
